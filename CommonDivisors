@@ -1,0 +1,53 @@
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"sort"
+	"strconv"
+	"strings"
+)
+
+func findCommonDivisors(numbers []int) []int {
+	var commonDivisors []int
+
+	// Поиск наименьшего числа в массиве.
+	sort.Ints(numbers)
+	minNumber := numbers[0]
+	// Проверка всех чисел от 1 до наименьшего числа.
+	for i := 1; i <= minNumber; i++ {
+		isCommonDivisor := true
+		for _, num := range numbers {
+			if num%i != 0 {
+				isCommonDivisor = false
+				break
+			}
+		}
+		// Добавление найденного общего делителя в массив.
+		if isCommonDivisor {
+			commonDivisors = append(commonDivisors, i)
+		}
+	}
+	return commonDivisors
+}
+
+func main() {
+	fmt.Print("Введите числа через пробел: ")
+	reader := bufio.NewReader(os.Stdin)
+	input, _ := reader.ReadString('\n')
+
+	numsStr := strings.Fields(input)
+	var numbers []int
+
+	for _, numStr := range numsStr {
+		num, err := strconv.Atoi(strings.TrimSpace(numStr))
+		if err != nil {
+			fmt.Println("Ошибка преобразования строки в число:", err)
+			return
+		}
+		numbers = append(numbers, num)
+	}
+	
+	fmt.Println("Общие делители:", findCommonDivisors(numbers))
+}
